@@ -1,36 +1,41 @@
 import BScroll from "better-scroll";
-import { useRef,useEffect,useState} from 'react'
-import propTypes from 'prop-types'
+import { useImperativeHandle,useEffect,useState,forwardRef} from 'react'
 import './index.scss'
-function Scroll (props: any){
-  const rootRef = useRef(null)
-  const [scroll,setScroll] = useState<any>(null)
-  useEffect(()=>{
-    let scrollRef = new BScroll(rootRef.current,{
-      observeDOM: true,
-      ...props
+const Scroll = forwardRef ((props,ref) =>{
+  const [scrollValue,setScrollValue] = useState<any>(null)
+  
+  const initScroll = () => {
+    setScrollValue(()=>{
+      return new BScroll(ref.current,{
+        observeDOM: true,
+        click: true,
+        ...props.options,
+      })
     })
-    setScroll(scrollRef)
+
+  }
+  useEffect(()=>{
+    initScroll()
     return ()=>{
-      scrollRef.destroy()
-      setScroll(null)
+      if(scrollValue && scrollValue.destroy){
+        scrollValue.destroy()
+      }
     }
   },[])
+  useEffect(()=> {
+    if(scrollValue) {
+      scrollValue.on('scroll', (pos) => {
+        props.onScroll && props.onScroll(pos)
+      })
+    }
+    props.getScroll && props.getScroll(scrollValue)
+  },[scrollValue])
   
- 
-  return <div ref={rootRef} className={props.className}>
+
+  return <div className={props.className} ref={ref}>
     {props.children}
   </div>
-}
+})
 
-Scroll.defaultProps = {
-  click: true,
-  probeType: 0
-}
-
-Scroll.propTypes = {
-  click: propTypes.boolean,
-  probeType: propTypes.number,
-}
 
 export default Scroll

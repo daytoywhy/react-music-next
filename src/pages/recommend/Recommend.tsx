@@ -1,10 +1,11 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { getRecommend } from '@/service/recommend'
 import styles from  './index.scss'
 
 import Scroll from '@/components/base/scroll/Scroll'
 import Slider from '@/components/base/slider/Slider'
 function Recommend() {
+  const scrollRef = useRef(null)
   const [albums, setAlbums] = useState([])
   const [sliders, setSliders] = useState([])
   useEffect(() => {
@@ -20,7 +21,7 @@ function Recommend() {
 
   return (
     <div className={styles.recommend}>
-      <Scroll className={styles.recommendContent}>
+      <Scroll className={styles.recommendContent} ref={scrollRef}>
         <div >
           <div className={styles.sliderWrapper}>
             <div className={styles.sliderContent}>

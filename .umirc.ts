@@ -6,7 +6,7 @@ export default defineConfig({
   routes: [
     { path: '/', component: '@/pages/recommend/Recommend' },
     { path: '/recommend', component: '@/pages/recommend/Recommend' },
-    { path: '/singer', component: '@/pages/Singer' },
+    { path: '/singer', component: '@/pages/singer/Singer' },
     { path: '/top-list', component: '@/pages/Toplist' },
     { path: '/search', component: '@/pages/Search' },
   ],

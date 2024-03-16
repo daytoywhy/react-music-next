@@ -7,8 +7,8 @@ export default defineConfig({
     { path: '/', component: '@/pages/recommend/Recommend' },
     { path: '/recommend', component: '@/pages/recommend/Recommend' },
     { path: '/singer', component: '@/pages/singer/Singer' },
-    { path: '/top-list', component: '@/pages/Toplist' },
-    { path: '/search', component: '@/pages/Search' },
+    { path: '/top-list', component: '@/pages/top-list/Toplist' },
+    { path: '/search', component: '@/pages/search/Search' },
   ],
   sassLoader:{
     additionalData: `@import "~@/assets/styles/variable.scss";`

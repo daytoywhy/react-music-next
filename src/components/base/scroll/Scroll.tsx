@@ -1,12 +1,13 @@
 import BScroll from "better-scroll";
-import { useImperativeHandle,useEffect,useState,forwardRef} from 'react'
+import { useRef,useEffect,useState} from 'react'
 import './index.scss'
-const Scroll = forwardRef ((props,ref) =>{
+const Scroll =(props) =>{
+  const scrollRef = useRef<any>(null)
   const [scrollValue,setScrollValue] = useState<any>(null)
   
   const initScroll = () => {
     setScrollValue(()=>{
-      return new BScroll(ref.current,{
+      return new BScroll(scrollRef.current,{
         observeDOM: true,
         click: true,
         ...props.options,
@@ -32,10 +33,10 @@ const Scroll = forwardRef ((props,ref) =>{
   },[scrollValue])
   
 
-  return <div className={props.className} ref={ref}>
+  return <div className={props.className} ref={scrollRef}>
     {props.children}
   </div>
-})
+}
 
 
 export default Scroll

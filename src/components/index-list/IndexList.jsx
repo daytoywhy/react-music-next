@@ -12,7 +12,6 @@ function IndexList(props) {
     currentIndex,
   } = useFixed(props)
   const {
-    scrollRef,
     shortcutList,
     onShortcutTouchStart,
     onShortcutTouchEnd,
@@ -27,7 +26,6 @@ function IndexList(props) {
       }}
       onScroll={onListenerScroll}
       getScroll = {getScrollRef}
-      ref={scrollRef}
     >
       <ul ref={groupRef}>
         {props.data.map((group) => (

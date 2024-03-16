@@ -5,7 +5,6 @@ import styles from  './index.scss'
 import Scroll from '@/components/base/scroll/Scroll'
 import Slider from '@/components/base/slider/Slider'
 function Recommend() {
-  const scrollRef = useRef(null)
   const [albums, setAlbums] = useState([])
   const [sliders, setSliders] = useState([])
   useEffect(() => {
@@ -21,7 +20,7 @@ function Recommend() {
 
   return (
     <div className={styles.recommend}>
-      <Scroll className={styles.recommendContent} ref={scrollRef}>
+      <Scroll className={styles.recommendContent}>
         <div >
           <div className={styles.sliderWrapper}>
             <div className={styles.sliderContent}>

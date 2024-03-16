@@ -2,7 +2,6 @@ import { useRef,useState,useEffect,useMemo } from "react";
 
 export default function useShortcut(props,groupRef){
   const ANCHOR_HEIGHT = 18
-  const scrollRef = useRef(null)
   const [scroll,setScroll] = useState(null)
   let shortcutList = useMemo(() => {
     return props.data.map((item) => item.title)
@@ -43,7 +42,6 @@ export default function useShortcut(props,groupRef){
   }
   return {
     shortcutList,
-    scrollRef,
     onShortcutTouchStart,
     onShortcutTouchEnd,
     onShortcutTouchMove,

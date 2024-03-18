@@ -1,7 +1,7 @@
 import { get } from './base'
 
 export function processSongs(songs) {
-  if (!songs.length) {
+  if (!songs?.length) {
     return Promise.resolve(songs)
   }
 

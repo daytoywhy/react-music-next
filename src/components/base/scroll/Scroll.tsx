@@ -33,7 +33,7 @@ const Scroll =(props) =>{
   },[scrollValue])
   
 
-  return <div className={props.className} ref={scrollRef}>
+  return <div className={props.className} ref={scrollRef} style={{...props.style}}>
     {props.children}
   </div>
 }

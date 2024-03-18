@@ -18,6 +18,9 @@ function IndexList(props) {
     onShortcutTouchMove,
     getScrollRef
   } = useShortcut(props, groupRef)
+  const onItemClick =(item)=>{
+    props.select(item)
+  }
   return (
     <Scroll
       className="index-list"
@@ -33,7 +36,9 @@ function IndexList(props) {
             <h2 className="title">{group.title}</h2>
             <ul>
               {group.list.map((item) => (
-                <li key={item.id} className="item">
+                <li key={item.id} className="item" onClick={
+                 ()=> onItemClick(item)
+                }>
                   <img className="avatar" src={item.pic} />
                   <span className="name">{item.name}</span>
                 </li>

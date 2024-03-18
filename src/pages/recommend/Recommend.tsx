@@ -1,12 +1,15 @@
 import { useState, useEffect, useRef } from 'react'
 import { getRecommend } from '@/service/recommend'
+import { ALBUM_KEY } from '@/assets/js/constant'
+import { history,Outlet } from 'umi'
 import styles from  './index.scss'
-
+import storage from 'good-storage'
 import Scroll from '@/components/base/scroll/Scroll'
 import Slider from '@/components/base/slider/Slider'
 function Recommend() {
   const [albums, setAlbums] = useState([])
   const [sliders, setSliders] = useState([])
+  const [selectedAlbum, setSelectedAlbum] = useState(null)
   useEffect(() => {
     (async function fetchRecommend(){
       let result = await getRecommend()
@@ -16,7 +19,11 @@ function Recommend() {
     
   }, [])
 
-  const selectItem = () => {}
+  const selectItem = (album) => {
+    setSelectedAlbum(album)
+    storage.session.set(ALBUM_KEY, album)
+    history.push(`/recommend/${album.id}`)
+  }
 
   return (
     <div className={styles.recommend}>
@@ -51,6 +58,7 @@ function Recommend() {
           </div>
         </div>
       </Scroll>
+      <Outlet data={selectedAlbum}/>
     </div>
   )
 }

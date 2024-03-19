@@ -7,7 +7,7 @@ export default function useFixed(props){
   const [listHeights,setListHeights] = useState([])
   const [currentIndex,setCurrentIndex] = useState(0)
   const [distance,setDistance] = useState(0)
-  const onListenerScroll = (pos) => {
+  const onScroll = (pos) => {
     setScrollY(-pos.y)
   }
   const calclate = ()=>{
@@ -50,7 +50,7 @@ export default function useFixed(props){
     return currentGroup ? currentGroup.title : ''
   },[scrollY])
   return {
-    onListenerScroll,
+    onScroll,
     groupRef,
     fixedStyle,
     fixedTitle,

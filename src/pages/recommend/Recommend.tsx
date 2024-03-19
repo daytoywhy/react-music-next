@@ -1,12 +1,14 @@
 import { useState, useEffect, useRef } from 'react'
 import { getRecommend } from '@/service/recommend'
 import { ALBUM_KEY } from '@/assets/js/constant'
-import { history,Outlet } from 'umi'
+import { history,Outlet,useLocation } from 'umi'
 import styles from  './index.scss'
 import storage from 'good-storage'
 import Scroll from '@/components/base/scroll/Scroll'
 import Slider from '@/components/base/slider/Slider'
+import { CSSTransition, SwitchTransition } from 'react-transition-group'
 function Recommend() {
+  const location = useLocation()
   const [albums, setAlbums] = useState([])
   const [sliders, setSliders] = useState([])
   const [selectedAlbum, setSelectedAlbum] = useState(null)
@@ -58,7 +60,17 @@ function Recommend() {
           </div>
         </div>
       </Scroll>
-      <Outlet data={selectedAlbum}/>
+      <SwitchTransition>
+        <CSSTransition
+          classNames="fade"
+          timeout={300}
+          key={location.pathname}
+          unmountOnExit={true}
+        >
+         <Outlet data={selectedAlbum}/>
+        </CSSTransition>
+      </SwitchTransition>
+      
     </div>
   )
 }

@@ -4,8 +4,9 @@ import './index.scss'
 import useFixed from './use-fixed.js'
 import useShortcut from './use-shortcut.js'
 function IndexList(props) {
+ 
   const {
-    onListenerScroll,
+    onScroll,
     groupRef,
     fixedStyle,
     fixedTitle,
@@ -16,7 +17,7 @@ function IndexList(props) {
     onShortcutTouchStart,
     onShortcutTouchEnd,
     onShortcutTouchMove,
-    getScrollRef
+    scrollRef
   } = useShortcut(props, groupRef)
   const onItemClick =(item)=>{
     props.select(item)
@@ -27,8 +28,8 @@ function IndexList(props) {
       options={{
         probeType: 3,
       }}
-      onScroll={onListenerScroll}
-      getScroll = {getScrollRef}
+      ref={scrollRef}
+      onScroll={onScroll}
     >
       <ul ref={groupRef}>
         {props.data.map((group) => (

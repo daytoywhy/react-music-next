@@ -22,7 +22,7 @@ export const randomPlay = (list) => {
   dispatch(setCurrentIndex(0))
 }
 
-export const changeMode = (state,mode) => {
+export const changeModeStore = (state,mode) => {
   const currentId = state.playlist[state.currentIndex].id
   if(mode === PLAY_MODE.random){
     dispatch(setPlaylist(shuffle(state.sequenceList)))
@@ -34,7 +34,7 @@ export const changeMode = (state,mode) => {
   dispatch(setCurrentIndex(index))
 }
 
-export const removeSong = (state,song) => {
+export const removeSongStore = (state,song) => {
   let playlist = state.playlist.slice()
   let sequenceList = state.sequenceList.slice()
 

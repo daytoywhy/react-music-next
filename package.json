@@ -14,6 +14,7 @@
     "@umijs/plugin-sass": "^1.1.1",
     "axios": "^1.6.7",
     "better-scroll": "^2.5.1",
+    "create-keyframe-animation": "^0.1.0",
     "express": "^4.18.3",
     "good-storage": "^1.1.1",
     "js-base64": "^3.7.7",

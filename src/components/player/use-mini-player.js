@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { useState, useRef, useEffect, useMemo } from 'vue'
 import BScroll from 'better-scroll'
-
+import { setCurrentIndex } from '@/store/slice/appSlice'
 export default function useMiniPlayer() {
   const dispatch = useDispatch()
   const sliderWrapperRef = useRef(null)

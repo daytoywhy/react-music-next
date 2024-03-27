@@ -1,4 +1,5 @@
-import { useState, useRef, useEffect, useMemo } from 'react'
+import './style/player.scss'
+import { useState, useRef, useEffect, useMemo, useCallback } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import Scroll from '@/components/base/scroll/Scroll'
 import { formatTime } from '@/assets/js/util.js'
@@ -10,9 +11,9 @@ import useAnimation from './use-animation.js'
 import usePlayHistory from './use-play-history.js'
 import useMode from './use-mode.js'
 import useFavorite from './use-favorite.js'
-import ProgressBar from './ProgressBar.jsx'
-import MiniPlayer from './MiniPlayer.jsx'
-import { history } from 'umi'
+import ProgressBar from './ProgressBar'
+import MiniPlayer from './MiniPlayer'
+import { setFullScreen,setPlayingState,setCurrentIndex} from '@/store/slice/appSlice'
 export default function Player() {
   const dispatch = useDispatch()
   const audioRef = useRef(null)
@@ -21,6 +22,7 @@ export default function Player() {
   const [currentTime, setCurrentTime] = useState(0)
   const [isProgressChanging, setIsProgressChanging] = useState(false)
   const { fullScreen,playing,playlist,currentIndex,playMode} = useSelector((state) => state.app)
+  
   const currentSong = useMemo(()=>{
     return playlist[currentIndex] || {}
   },[currentIndex,playlist])
@@ -34,10 +36,8 @@ export default function Player() {
   const progress = useMemo(()=>{
     return currentTime / currentSong.duration
   },[currentTime])
-  const goBack = () => {
-    history.go(-1)
-  }
   const { modeIcon, changeMode } = useMode()
+  
   const { cdCls, cdRef, cdImageRef } = useCd()
   const { getFavoriteIcon, toggleFavorite } = useFavorite()
   const {
@@ -116,7 +116,7 @@ export default function Player() {
     if (list.length === 1) {
       loop()
     } else {
-      let index = currentIndex.value + 1
+      let index = currentIndex + 1
       if (index === list.length) {
         index = 0
       }
@@ -158,14 +158,15 @@ export default function Player() {
 
   const progressChanging = (progress)=>{
     setIsProgressChanging(true)
-    setCurrentTime(currentSong.value.duration * progress)
+    setCurrentTime(currentSong.duration * progress)
+    
     playLyric()
     stopLyric()
   }
 
   const progressChanged = (progress)=>{
     setIsProgressChanging(false)
-    setCurrentTime(currentSong.value.duration * progress)
+    setCurrentTime(currentSong.duration * progress)
     const audioEl = audioRef.current
       audioEl.currentTime = currentTime
       if (!playing) {
@@ -183,8 +184,8 @@ export default function Player() {
     }
   }
   return (
-    <div className="player" v-show="playlist.length">
-      <div className="normal-player" v-show="fullScreen">
+    <div className="player" style={{ display: playlist.length ? 'block' : 'none'}}>
+      <div className="normal-player"  style={{display: fullScreen ? 'block' : 'none'}}>
         <div className="background">
           <img src={currentSong.pic} />
         </div>
@@ -237,7 +238,7 @@ export default function Player() {
                 ''
               )}
 
-              <div className="pure-music" v-show="pureMusicLyric">
+              <div className="pure-music" style={{display : pureMusicLyric ? 'block' : 'none'}}>
                 <p>{pureMusicLyric}</p>
               </div>
             </div>
@@ -282,12 +283,20 @@ export default function Player() {
             <div className="icon i-right">
               <i
                 className={getFavoriteIcon(currentSong)}
-                onClick={toggleFavorite(currentSong)}
+                onClick={()=>toggleFavorite(currentSong)}
               ></i>
             </div>
           </div>
         </div>
       </div>
+      <audio
+      ref={audioRef}
+      onPause={pause}
+      onError={error}
+      onCanPlay={ready}
+      onTimeUpdate={updateTime}
+      onEnded={end}
+    ></audio>
     </div>
   )
 }

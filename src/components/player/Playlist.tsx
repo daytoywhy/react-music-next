@@ -1,18 +1,23 @@
+import './style/playlist.scss'
 import { createPortal } from 'react-dom'
 import Scroll from '../base/scroll/Scroll'
 import useMode from './use-mode'
 import useFavorite from './use-favorite'
-import { useState, useMemo, useEffect } from 'react'
+import { useState, useMemo, useEffect,useRef } from 'react'
 import { useSelector,useDispatch } from 'react-redux'
-import { clearSongList, removeSongStore } from '@/store/slice/actionHook'
+import useAppSelector from '@/store/slice/actionHook'
+import { setPlayingState,setCurrentIndex} from '@/store/slice/appSlice'
 export default function Playlist(props){
   const dispatch = useDispatch()
-  const {playlist,currentIndex,sequenceList} = store = useSelector((state) => state.app)
+  const { clearSongList, removeSongStore } = useAppSelector()
+  const store = useSelector((state) => state.app)
+  const {playlist,currentIndex,sequenceList} = store 
   const currentSong = useMemo(() => playlist[currentIndex] || {}, [currentIndex, playlist])
   const [visible,setVisible] = useState(false)
   const [scroll,setScroll] = useState(null)
   const [removing,setRemoving] = useState(false)
   const listRef = useRef(null)
+  const scrollRef = useRef(null)
   const show = ()=>{
     setVisible(true)
     refreshScroll()
@@ -21,12 +26,9 @@ export default function Playlist(props){
   const hide = ()=>{
     setVisible(false)
   }
-  const getScroll = (scroll) => {
-    setScroll(scroll)
-  }
 
   const  refreshScroll =()=>{
-    scroll.refresh()
+    scrollRef.current.scroll.refresh()
   }
   const  scrollToCurrent = ()=>{
     const listRefVal = listRef.current
@@ -35,7 +37,7 @@ export default function Playlist(props){
     })
     if(index === -1) return
     const target = listRefVal.$el.children[index]
-    scroll.scrollToElement(target, 300)
+    scrollRef.current.scroll.scrollToElement(target, 300)
   }
   const selectItem = (song) =>{
     const index = playlist.findIndex(item => item.id === song.id)
@@ -85,7 +87,7 @@ export default function Playlist(props){
             </span>
           </h1>
         </div>
-        <Scroll getScroll={getScroll} ref="scrollRef" className="list-content">
+        <Scroll  ref={scrollRef} className="list-content">
           <ul ref="listRef">
             {
               sequenceList.map(song =>    <li

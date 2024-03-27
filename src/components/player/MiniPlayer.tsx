@@ -1,9 +1,11 @@
+import './style/mini-player.scss'
 import ProgressCircle from "./ProgressCircle"
 import Playlist from "./Playlist"
 import useCd from './use-cd'
 import useMiniPlayer from './use-mini-player' 
 import { useMemo,useState,useRef } from "react"
 import { useSelector,useDispatch } from "react-redux"
+import { setFullScreen} from '@/store/slice/appSlice'
 export default function MiniPlayer(props){
   const dispatch = useDispatch()
   const playlistRef = useRef(null)

@@ -1,9 +1,11 @@
 import { PLAY_MODE } from '@/assets/js/constant'
 import { useMemo } from 'react'
 import { useSelector } from 'react-redux'
-import { changeModeStore } from '@/store/slice/actionHook.tsx'
+import useAppSelector from '@/store/slice/actionHook.tsx'
 export default function useMode() {
-  const { playMode } = store = useSelector(state => state.app)
+  const {changeModeStore } = useAppSelector()
+  const store =  useSelector(state => state.app)
+  const { playMode } = store 
   const modeIcon = useMemo(()=>{
     return playMode === PLAY_MODE.sequence
       ? 'icon-sequence'
@@ -18,7 +20,7 @@ export default function useMode() {
       : playMode === PLAY_MODE.random
         ? '随机播放'
         : '循环播放'
-  },playMode)
+  },[playMode])
   function changeMode() {
     const mode = (playMode + 1) % 3
     changeModeStore(store,mode)

@@ -1,9 +1,24 @@
-import { useMemo, useEffect, useState, useRef } from 'react'
-export default function ProgressBar(props) {
+import {
+  useMemo,
+  useEffect,
+  useState,
+  useRef,
+  useImperativeHandle,
+  forwardRef,
+} from 'react'
+import './style/progress-bar.scss'
+const ProgressBar = forwardRef((props,ref) => {
+  useImperativeHandle(ref,()=>{
+    return{
+      setOffset:setOffset
+    }
+  })
   const progressBtnWidth = 16
   const progressRef = useRef<HTMLDivElement>(null)
-  const progress = useRef<HTMLDivElement>(null)
-  const touch = useMemo(()=>{},[])
+  const innerProgressRef = useRef<HTMLDivElement>(null)
+  const touch = useMemo(() => {
+    return {}
+  }, [])
   const [offset, setOffset] = useState(0)
   const progressStyle = useMemo(() => {
     return {
@@ -25,9 +40,9 @@ export default function ProgressBar(props) {
     const barWidth = progressRef.current.clientWidth - progressBtnWidth
     setOffset(progress * barWidth)
   }
-  const onProgressTouchStart =(e) =>{
+  const onProgressTouchStart = (e) => {
     touch.x1 = e.changedTouches[0].pageX
-    touch.beginWidth = progress.current.clientWidth
+    touch.beginWidth = innerProgressRef.current.clientWidth
   }
   const onProgressTouchMove = (e) => {
     const delta = e.changedTouches[0].pageX - touch.x1
@@ -39,14 +54,16 @@ export default function ProgressBar(props) {
   }
   const onProgressTouchEnd = () => {
     const barWidth = progressRef.current.clientWidth - progressBtnWidth
-    const progress = progress.current.clientWidth / barWidth
+    const progress = innerProgressRef.current.clientWidth / barWidth
     props.progressChanged(progress)
   }
   const onClick = (e) => {
     const rect = progressRef.current.getBoundingClientRect()
+    
     const offsetWidth = e.pageX - rect.left
     const barWidth = progressRef.current.clientWidth - progressBtnWidth
     const progress = offsetWidth / barWidth
+    
     props.progressChanged(progress)
   }
   return (
@@ -54,7 +71,7 @@ export default function ProgressBar(props) {
       <div className="bar-inner">
         <div
           className="progress"
-          ref={progress}
+          ref={innerProgressRef}
           style={{ ...progressStyle }}
         ></div>
         <div
@@ -69,4 +86,6 @@ export default function ProgressBar(props) {
       </div>
     </div>
   )
-}
+})
+
+export default ProgressBar

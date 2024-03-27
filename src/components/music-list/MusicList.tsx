@@ -3,11 +3,12 @@ import Scroll from '@/components/base/scroll/Scroll'
 import SongList from '@/components/base/song-list/SongList'
 import PropTypes from 'prop-types'
 import { useSelector } from 'react-redux'
+import useAppSelector from '@/store/slice/actionHook'
 import { history } from 'umi'
 import './index.scss'
 export default function MusicList(props) {
   const { playlist } = useSelector((state) => state.app)
-
+  const { selectPlay,randomPlay } = useAppSelector()
   const RESERVED_HEIGHT = 40
   const { songs, rank, title, pic, loading } = props
   const bgImage = useRef(null)
@@ -75,8 +76,15 @@ export default function MusicList(props) {
       bottom,
     }
   }, [imageHeight, playlist])
-  const random = () => {}
-  const selectItem = () => {}
+  const random = () => {
+    randomPlay(playlist)
+  }
+  const selectItem = ({song,index}) => {
+    selectPlay({
+      list: songs,
+      index
+    })
+  }
   const handleScroll = (pos) => {
     setScrollY(-pos.y)
   }

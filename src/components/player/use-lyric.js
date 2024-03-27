@@ -2,7 +2,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { useMemo, useState, useEffect, useRef } from 'react'
 import { getLyric } from '@/service/song'
 import Lyric from 'lyric-parser'
-
+import {addSongLyric} from '@/store/slice/appSlice'
 export default function useLyric({ songReady, currentTime }) {
   const dispatch = useDispatch()
   const lyricScrollRef = useRef(null)
@@ -22,7 +22,8 @@ export default function useLyric({ songReady, currentTime }) {
     setCurrentLyric(null)
     setCurrentLineNum(0)
     setPureMusicLyric('')
-    setPlayingLyric('')(async function () {
+    setPlayingLyric('')
+    ;(async function () {
       const lyric = await getLyric(newSong)
       dispatch(
         addSongLyric({
@@ -30,19 +31,20 @@ export default function useLyric({ songReady, currentTime }) {
           lyric,
         })
       )
+      if (currentSong.lyric !== lyric) return
+      setCurrentLyric(new Lyric(lyric, handleLyric))
+      const hasLyric = currentLyric.lines.length > 0
+      if (hasLyric) {
+        if (songReady) {
+          playLyric()
+        }
+      } else {
+        setPlayingLyric(lyric.replace(/\[(\d{2}):(\d{2}):(\d{2})\]/g, ''))
+        setPureMusicLyric(lyric.replace(/\[(\d{2}):(\d{2}):(\d{2})\]/g, ''))
+      }
     })
 
-    if (currentSong.lyric !== lyric) return
-    setCurrentLyric(new Lyric(lyric, handleLyric))
-    const hasLyric = currentLyric.lines.length > 0
-    if (hasLyric) {
-      if (songReady) {
-        playLyric()
-      }
-    } else {
-      setPlayingLyric(lyric.replace(/\[(\d{2}):(\d{2}):(\d{2})\]/g, ''))
-      setPureMusicLyric(lyric.replace(/\[(\d{2}):(\d{2}):(\d{2})\]/g, ''))
-    }
+
   }, [currentSong])
 
   function handleLyric({ lineNum, txt }) {

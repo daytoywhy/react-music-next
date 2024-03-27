@@ -5,7 +5,9 @@ export default function useMiddleInteractive() {
   const [middleRStyle, setMiddleRStyle] = useState(null)
   const [currentShow, setCurrentShow] = useState('cd')
 
-  const touch = useMemo(() => {}, [])
+  const touch = useMemo(() => {
+    return {}
+  }, [])
   let currentView = 'cd'
   function onMiddleTouchStart(e) {
     touch.startX = e.changedTouches[0].pageX

@@ -2,8 +2,9 @@ import { useDispatch,useSelector } from 'react-redux'
 import { useMemo } from 'react'
 import { save, remove } from '@/assets/js/array-store'
 import { FAVORITE_KEY } from '@/assets/js/constant'
-
+import { setFavoriteList} from '@/store/slice/appSlice'
 export default function useFavorite() {
+  const dispatch = useDispatch()
   const { favoriteList} = useSelector((state) => state.app)
   const maxLen = 100
 
@@ -18,7 +19,7 @@ export default function useFavorite() {
     } else {
       list = save(song, FAVORITE_KEY, compare, maxLen)
     }
-    store.commit('setFavoriteList', list)
+    dispatch(setFavoriteList(list))
 
     function compare(item) {
       return item.id === song.id

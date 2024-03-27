@@ -1,4 +1,5 @@
 import { useMemo } from "react";
+import './style/progress-circle.scss'
 export default function ProgressCircle(props){
   const dashArray = Math.PI * 100;
   const dashOffset = useMemo(() => {
